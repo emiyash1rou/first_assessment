@@ -1,0 +1,66 @@
+# For authentication, signouts
+#Where the homepage is, gui
+ 
+from flask import Blueprint,render_template, redirect,url_for,request,flash
+from . import db
+from .models import User
+from flask_login import login_user,logout_user, login_required,current_user
+from werkzeug.security import generate_password_hash,check_password_hash
+auth = Blueprint("auth",__name__)
+@auth.route("/login",methods=['GET','POST'])
+def login():
+    if request.method=='POST':
+        email=request.form.get("email")
+        password=request.form.get("password")
+        user= User.query.filter_by(email=email).first()
+        print("FOUND",user)
+        if user:
+            if check_password_hash(user.password,password):
+                flash('Logged in!')
+                login_user(user,remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash('Password is incorect',category='error')
+        else:
+            flash('User does not exist',category='error')
+ 
+    return render_template("login.html",user=current_user)
+@auth.route("/sign-up",methods=['GET','POST'])
+def sign_up():
+    if request.method=='POST':
+        username = request.form.get("username")
+        email=request.form.get("email")
+        password=request.form.get("password")
+        password1=request.form.get("password1")
+        f_name=request.form.get('f_name')
+        l_name=request.form.get('l_name')
+        email_exists=User.query.filter_by(email=email).first()
+        username_exists=User.query.filter_by(username=username).first()
+        if email_exists:
+            flash('Email is already in use.',category='error')
+        elif username_exists:
+            flash('Username is already in use.',category='error')
+        elif password!=password:
+            flash('Passwords do not match',category='error')
+        elif len(username)<2:
+            flash('Username is too short',category='error')
+        elif len(password1)<6:
+            flash('Password is too short',category='error')
+        elif len(email)<4:
+            flash('Email is too short',category='error')
+        else:
+            new_user=User(email=email,username=username,password=generate_password_hash(password1,method='sha256'),firstname=f_name,lastname=l_name,admin="no")
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user,remember=True)
+            flash('User created!')
+            print("User Values",username,email,password,password1,l_name,f_name)
+            return redirect(url_for('views.home'))
+            
+    return render_template("signup.html",user=current_user)
+ 
+@auth.route("/logout")
+@login_required # only access this page when ur logged in
+def logout():
+    logout_user()
+    return redirect(url_for("auth.login"))

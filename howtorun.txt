@@ -1,0 +1,4 @@
+1. Run virtualenv
+2. Do this: py -m venv env
+3. env/Scripts/activate
+4. python app.py

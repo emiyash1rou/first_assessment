@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+<title>{% block title %}LOVE Register{% endblock %}</title>
+{% block content %}
+<div class="container shadow p-3 mb-5 bg-body rounded">
+    <div class="row">
+      <div class="col-8"> 
+
+     
+<h1 align="left">Log In</h1>
+<form method="POST" align="left">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
+      <div id="emailHelp" class="form-text" >We'll never share your email with anyone else.</div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" required>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Log In</button>
+  </form>
+</div>
+<div class="col-4">
+    <div class="card">
+        <img src="https://i.guim.co.uk/img/media/bdf23d7b1bbb200cf72ae0c22f051bf926445b20/1_0_5075_3046/master/5075.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=c54061a8d861b798e85e896465abec73" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">What is LOVE?</h5>
+          <p class="card-text">LOVE(an acronym that stands for Licensing Of Vehicle for Everyone) is a startup company that aims to process licensing for vehicles faster and smoother.</p>
+          
+        </div>
+      </div>
+</div>
+
+</div>
+      </div>
+{% endblock %}
